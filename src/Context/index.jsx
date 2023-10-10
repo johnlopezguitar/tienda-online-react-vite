@@ -1,6 +1,31 @@
 import { createContext , useState , useEffect} from 'react';
 import { PropTypes } from 'prop-types';
+
 export const  ShoppingCartContext = createContext();
+
+// llmando variables del localStorage
+export const initiaLizeLocalStorage = () =>{
+   const accountInLocalStorage = localStorage.getItem('account')
+   const signOutInLocalStorage = localStorage.getItem('sing-out')
+ 
+   let parsedAccount 
+   let parsedSignOut
+       
+   if(!accountInLocalStorage){
+     localStorage.setItem('account', JSON.stringify({}))
+     parsedAccount = {}
+   }else{
+     parsedAccount = JSON.parse(accountInLocalStorage)
+   }
+   
+   if(!signOutInLocalStorage){
+     localStorage.setItem('sing-out', JSON.stringify(false))
+     parsedSignOut = false
+   }else {
+     parsedSignOut = JSON.parse(signOutInLocalStorage)
+   }
+} 
+
 
 export const ShoppingCartProvider =({children})=>{
         ShoppingCartProvider.propTypes ={
@@ -8,6 +33,15 @@ export const ShoppingCartProvider =({children})=>{
         PropTypes.node.isRequired,
         
     };
+
+    //My account 
+    const [account , setAccount] = useState({})
+
+    //Sign out
+    
+    const [singOut , setSignOut] = useState(false)
+
+ 
     //sopping Cart * Increment quantity
     const [count , setCount] = useState(0)
     //console.log('COUNT:', count)
@@ -111,7 +145,11 @@ export const ShoppingCartProvider =({children})=>{
           setSearchByTitle,
           filteredItems,
           searchByCategory,
-          setSearchByCategory
+          setSearchByCategory,
+          account,
+          setAccount,
+          singOut,
+          setSignOut
 
        }}>
         {children}
